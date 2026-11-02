@@ -15,7 +15,7 @@
 
 ## 下载使用
 
-从 [Releases](../../releases) 下载 `右键菜单管理-x.x.x.exe`，双击即用，不需要安装 Node。
+从 [Releases](../../releases) 下载 `ctx-menu-manager-x.x.x-win-x64.exe`，双击即用，不需要安装 Node。
 
 - 未做代码签名，Windows SmartScreen 可能拦截：点「更多信息 → 仍要运行」
 - 便携版每次启动会自解压到 `%TEMP%`，首次约 3–5 秒出窗口
@@ -67,6 +67,8 @@ npm install
 npm run icon     # 生成 assets/icon.ico（六个尺寸，纯 Node 绘制，无图形库依赖）
 npm run build    # 输出 dist/右键菜单管理-x.x.x.exe
 ```
+
+发布时把产物重命名为 `ctx-menu-manager-x.x.x-win-x64.exe`（ASCII 文件名，方便命令行下载）。
 
 打包时 `asar` 是关闭的：`scan.ps1` / `regwrite.ps1` 必须是磁盘上真实存在的文件，
 PowerShell 才能执行，asar 包内的路径 spawn 不了。
