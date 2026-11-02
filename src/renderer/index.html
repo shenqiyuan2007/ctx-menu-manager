@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; script-src 'self'" />
+<title>右键菜单管理</title>
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+<div class="app">
+  <header class="titlebar">
+    <div class="tb-left">
+      <span class="logo" aria-hidden="true">
+        <svg viewBox="0 0 24 24" width="16" height="16"><rect x="3" y="4" width="12" height="2.2" rx="1.1" fill="currentColor"/><rect x="3" y="10.9" width="16" height="2.2" rx="1.1" fill="currentColor"/><rect x="3" y="17.8" width="9" height="2.2" rx="1.1" fill="currentColor"/></svg>
+      </span>
+      <span class="tb-title">右键菜单管理</span>
+      <span class="tb-badge" id="osBadge">Windows 11</span>
+    </div>
+    <div class="tb-right">
+      <button class="tb-btn" id="btnMin" title="最小化" aria-label="最小化">
+        <svg viewBox="0 0 12 12" width="12" height="12"><rect x="2" y="5.4" width="8" height="1.2" rx=".6" fill="currentColor"/></svg>
+      </button>
+      <button class="tb-btn danger" id="btnClose" title="关闭" aria-label="关闭">
+        <svg viewBox="0 0 12 12" width="12" height="12"><path d="M3 3l6 6M9 3l-6 6" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="hero-mark" aria-hidden="true">
+      <svg viewBox="0 0 28 28" width="26" height="26">
+        <rect x="9" y="4" width="10" height="17" rx="5" fill="#2B6EF5" opacity=".18"/>
+        <rect x="9" y="4" width="10" height="17" rx="5" stroke="#2B6EF5" stroke-width="1.6" fill="none"/>
+        <rect x="13" y="7.5" width="2" height="4.5" rx="1" fill="#2B6EF5"/>
+        <path d="M12 21.5v3.2M16 21.5v3.2" stroke="#2B6EF5" stroke-width="1.6" stroke-linecap="round"/>
+      </svg>
+    </div>
+    <div class="hero-copy">
+      <h1><b id="heroCount">—</b> 项<span id="heroScope">文件右键菜单</span>已开启</h1>
+      <p>轻松管理右键菜单，提升电脑整洁度</p>
+    </div>
+    <div class="hero-actions">
+      <button class="btn primary" id="btnRefresh">
+        <svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><path d="M13 8a5 5 0 1 1-1.6-3.7" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><path d="M13 2.6V5.4h-2.8" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        刷新
+      </button>
+    </div>
+  </section>
+
+  <div class="warnbar" id="warnbar" hidden>
+    <svg viewBox="0 0 16 16" width="15" height="15" aria-hidden="true"><circle cx="8" cy="8" r="6.6" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="M8 4.8v4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><circle cx="8" cy="11.2" r=".85" fill="currentColor"/></svg>
+    <span>当前以普通权限运行，修改系统级菜单项会被拒绝。</span>
+    <button class="link-btn" id="btnElevate">以管理员身份重启</button>
+  </div>
+
+  <nav class="tabs" role="tablist">
+    <button class="tab is-active" data-tab="file" role="tab">文件右键管理</button>
+    <button class="tab" data-tab="desktop" role="tab">桌面右键管理</button>
+    <button class="tab" data-tab="new" role="tab">新建菜单管理</button>
+    <div class="tab-parity" id="parityNote"></div>
+  </nav>
+
+  <section class="table">
+    <div class="thead">
+      <div class="th th-name">
+        <span>菜单项名称</span>
+        <button class="funnel" id="funnelType" title="按菜单类型筛选" aria-label="按菜单类型筛选">
+          <svg viewBox="0 0 12 12" width="11" height="11"><path d="M1.5 2.2h9L7 6.1v3.6L5 10.6V6.1L1.5 2.2z" fill="none" stroke="currentColor" stroke-width="1.1" stroke-linejoin="round"/></svg>
+        </button>
+      </div>
+      <div class="th th-status">
+        <span>状态</span>
+        <button class="funnel" id="funnelStatus" title="按状态筛选" aria-label="按状态筛选">
+          <svg viewBox="0 0 12 12" width="11" height="11"><path d="M1.5 2.2h9L7 6.1v3.6L5 10.6V6.1L1.5 2.2z" fill="none" stroke="currentColor" stroke-width="1.1" stroke-linejoin="round"/></svg>
+        </button>
+      </div>
+    </div>
+    <div class="tbody" id="rows" role="tabpanel"></div>
+  </section>
+
+  <footer class="statusbar">
+    <div class="sb-left">
+      <span id="sbCount">正在读取…</span>
+      <span class="dot"></span>
+      <span id="sbScope">文件右键</span>
+    </div>
+    <div class="sb-right">
+      <button class="btn ghost" id="btnHistory">操作记录</button>
+      <button class="btn ghost" id="btnBackups">备份目录</button>
+      <button class="btn ghost" id="btnExplorer">重启资源管理器</button>
+    </div>
+  </footer>
+</div>
+
+<div class="scrim" id="scrim" hidden></div>
+
+<aside class="drawer" id="drawer" aria-hidden="true">
+  <div class="dw-head">
+    <div class="dw-icon" id="dwIcon"></div>
+    <div class="dw-title">
+      <div class="dw-name" id="dwName"></div>
+      <div class="dw-sub" id="dwSub"></div>
+    </div>
+    <button class="icon-btn" id="dwClose" aria-label="关闭">
+      <svg viewBox="0 0 12 12" width="12" height="12"><path d="M3 3l6 6M9 3l-6 6" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+    </button>
+  </div>
+  <div class="dw-body" id="dwBody"></div>
+  <div class="dw-foot" id="dwFoot"></div>
+</aside>
+
+<div class="popover" id="popover" hidden></div>
+
+<div class="modal-mask" id="modalMask" hidden>
+  <div class="modal" role="dialog" aria-modal="true">
+    <h3 id="modalTitle"></h3>
+    <p id="modalText"></p>
+    <div class="modal-actions">
+      <button class="btn ghost" id="modalCancel">取消</button>
+      <button class="btn primary" id="modalOk">确定</button>
+    </div>
+  </div>
+</div>
+
+<div class="toasts" id="toasts"></div>
+
+<script src="mock.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

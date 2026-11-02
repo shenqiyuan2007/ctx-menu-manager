@@ -1,0 +1,49 @@
+{
+  "name": "ctx-menu-manager",
+  "productName": "右键菜单管理",
+  "version": "1.0.0",
+  "description": "轻量级 Windows 右键菜单管理器",
+  "main": "src/main.js",
+  "scripts": {
+    "start": "node scripts/start.js",
+    "selftest": "node scripts/selftest.js",
+    "e2e": "node scripts/e2e.js",
+    "icon": "node scripts/make-icon.js",
+    "build": "electron-builder --win portable --x64"
+  },
+  "author": "local",
+  "license": "MIT",
+  "devDependencies": {
+    "electron": "^45.0.0",
+    "electron-builder": "^26.18.0"
+  },
+  "build": {
+    "appId": "com.local.ctxmenumanager",
+    "productName": "右键菜单管理",
+    "asar": false,
+    "directories": {
+      "output": "dist",
+      "buildResources": "assets"
+    },
+    "files": [
+      "src/**/*",
+      "scripts/scan.ps1",
+      "scripts/regwrite.ps1",
+      "package.json"
+    ],
+    "win": {
+      "icon": "assets/icon.ico",
+      "target": [
+        {
+          "target": "portable",
+          "arch": [
+            "x64"
+          ]
+        }
+      ]
+    },
+    "portable": {
+      "artifactName": "右键菜单管理-${version}.exe"
+    }
+  }
+}
